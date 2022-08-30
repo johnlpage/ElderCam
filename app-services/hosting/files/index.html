@@ -1,0 +1,211 @@
+<html>
+
+<head>
+
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 5vw;
+        }
+
+        .message {
+
+            width: 100%;
+            height: 20vw;
+            background-color: white;
+            border: 1px solid green;
+            display: block;
+        }
+
+        .chart {
+            height: 500px;
+        }
+
+
+        .imgbox {
+            display: block;
+            width: 100%;
+        }
+
+        .label {
+            color: lightgreen;
+            position: absolute;
+            background-color: black;
+            border: 2px solid grey;
+            font-family: Arial, Helvetica, sans-serif
+            top: 0;
+            left: -200;
+            z-index: 5;
+        }
+    </style>
+
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <script src="https://unpkg.com/@mongodb-js/charts-embed-dom"></script>
+    <script>
+
+        let app;
+        let selectedImage = null; //Used to ensure updates dont change one we picked.
+        let timeout = null;
+        let lastRecordRead = null;
+
+        function labelItems(labels) {
+            let count = 0;
+
+            //Get image size and position
+
+            const imgel = document.getElementById('camview');
+            const imgrect = imgel.getBoundingClientRect();
+            //console.log(imgrect);
+            for (let l = 0; l < 5; l++) {
+                let id = `label_${l + 1}`
+                let el = document.getElementById(id);
+                el.hidden = true;
+            }
+
+            if (labels == null) return;
+
+            for (let label of labels) {
+                // console.log(label)
+                if (label.Instances.length > 0) {
+                    for (let instance of label.Instances) {
+                        if (instance.Confidence > 85) {
+                            let id = `label_${count + 1}`
+                            let el = document.getElementById(id);
+                            if (el) {
+                                //console.log(instance)
+                                //console.log(label.Name)
+                                el.innerText = label.Name
+                                const { Width, Height, Left, Top } = instance.BoundingBox
+                                //Image is flipped so these co-ords are from bottom right
+                                el.style.left = imgrect.left + (imgrect.width * Left)
+                                el.style.top = imgrect.top + (imgrect.height * Top)
+                                el.style.width = (imgrect.width * Width)
+                                el.style.height = (imgrect.height * Height)
+                                el.hidden = false;
+                                count++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function showmessage(msg) {
+            document.getElementById('message').innerText = msg;
+        }
+
+        async function login() {
+            const email = document.getElementById('username').value
+            const password = document.getElementById('password').value
+            const credentials = Realm.Credentials.emailPassword(email, password);
+            const user = await app.logIn(credentials);
+
+            updateImage(null);
+        }
+
+        function secstowords(secs) {
+            if (secs < 120) { return `${secs} seconds` }
+            if (secs < 7200) { return `${Math.floor(secs / 60)} minutes` }
+            return `${Math.floor(secs / 3600)} hours`
+
+        }
+        async function updateImage() {
+            console.log("update");
+            console.log(selectedImage)
+            if(timeout) {clearTimeout(timeout)} //Stop any auto updates planned
+
+            if (app.currentUser == null) {
+                console.log("not logged in");
+                document.getElementById('login').hidden = false;
+                return;
+
+            }
+
+            
+            const sdk = new ChartsEmbedSDK({
+                  baseUrl: "https://charts.mongodb.com/charts-eldercam-vufsm", 
+                  getUserToken: () => app.currentUser._accessToken,
+            });
+
+            const chart = sdk.createChart({
+                chartId: "63062dd7-04f7-42b6-8cb0-790f436d9cc0", 
+            });
+            chart.render(document.getElementById("chart"));
+
+            const chart2 = sdk.createChart({
+                chartId: "af171e0e-43a2-40eb-9bbb-8c6e91c28d0c", 
+            });
+            chart2.render(document.getElementById("chart2"));
+
+            document.getElementById('login').hidden = true;
+            lastRecordRead = await app.currentUser.functions.getLatestImage(selectedImage);
+            const { img, time, labels, lastPerson ,lastVisitor } = lastRecordRead;
+            console.log(lastRecordRead);
+            const imgelement = document.getElementById('camview');
+            
+            if(lastRecordRead.nsfw && document.getElementById('nsfw').checked==false){
+                imgelement.src ="nsfw-sign2.png"
+            } else {
+                imgelement.src = 'data:image/jpeg;base64,' + img.toString('base64');
+            }
+            const age = Math.floor((new Date() - time) / 1000);
+
+            const lastPersonSeen = Math.floor((new Date() - lastPerson.time) / 1000) - age;
+            const lastVisitorSeen = Math.floor((new Date() - lastVisitor.time) / 1000) - age;
+            message = `${time.toLocaleString()} (${secstowords(age)} ago)
+            Person seen ${secstowords(lastPersonSeen)} ago
+            Visitor seen ${secstowords(lastVisitorSeen)} ago\n`
+
+            showmessage(message)
+            labelItems(labels)
+
+            //Update in 1 minute
+            timeout = setTimeout(updateImage, 60000);
+        }
+
+        async function onLoad() {
+            app = new Realm.App({ id: "eldercam-hfxep" });
+            updateImage();
+        }
+
+
+    </script>
+</head>
+
+<body onLoad="onLoad()">
+    <div id="login">
+        Username: <input id="username">
+        Password: <input id="password" type="password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="message" class="message">
+
+
+    </div>
+    
+    <img class="imgbox" id="camview">
+    <div>
+        <button  onClick="selectedImage=lastRecordRead?.previousImage15;updateImage();"> -15 mins </button>
+        <button onClick="selectedImage=lastRecordRead?.previousImage;updateImage();"> prev </button>
+        <button onClick="selectedImage=null;updateImage();"> latest </button>
+        <button  onClick="selectedImage=lastRecordRead?.nextImage;updateImage();""> next </button>
+        <button  onClick="selectedImage=lastRecordRead?.nextImage15;updateImage();""> +15 mins </button><br>
+        <button  onClick="selectedImage=lastRecordRead?.lastPerson?._id;updateImage();""> Last Seen </button>
+        <button  onClick="selectedImage=lastRecordRead?.lastVisitor?._id;updateImage();""> Last Visitor </button>
+        Allow NSFW <input onchange="updateImage()" type="checkbox" id="nsfw" name="nsfw" value="NSFW">
+    </div>
+    <div class="chart-container">
+        <div class="chart" id="chart"></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart" id="chart2"></div>
+      </div>
+    <span class="label" id="label_1">Hello</span>
+    <span class="label" id="label_2">Hello</span>
+    <span class="label" id="label_3">Hello</span>
+    <span class="label" id="label_4">Hello</span>
+    <span class="label" id="label_5">Hello</span>
+</body>
+
+</html>

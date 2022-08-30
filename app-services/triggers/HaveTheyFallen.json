@@ -1,0 +1,37 @@
+{
+    "name": "HaveTheyFallen",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "UPDATE"
+        ],
+        "database": "eldercam",
+        "collection": "frames",
+        "service_name": "mongodb-atlas",
+        "match": {
+            "updateDescription.updatedFields.labels": {
+                "$elemMatch": {
+                    "Name": "Person",
+                    "Instances.BoundingBox.Top": {
+                        "$gt": {
+                            "$numberDouble": "0.6"
+                        }
+                    }
+                }
+            }
+        },
+        "project": {},
+        "full_document": true,
+        "full_document_before_change": false,
+        "unordered": false,
+        "skip_catchup_events": false
+    },
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "TheyHaveFallen"
+            }
+        }
+    }
+}

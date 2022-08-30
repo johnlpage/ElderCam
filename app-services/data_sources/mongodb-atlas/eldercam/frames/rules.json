@@ -1,0 +1,15 @@
+{
+    "collection": "frames",
+    "database": "eldercam",
+    "roles": [
+        {
+            "name": "readAll",
+            "apply_when": {},
+            "read": true,
+            "write": true,
+            "insert": false,
+            "delete": false,
+            "search": true
+        }
+    ]
+}

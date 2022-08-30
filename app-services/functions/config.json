@@ -1,0 +1,26 @@
+[
+    {
+        "name": "showLatest",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "resetFunc",
+        "private": false
+    },
+    {
+        "name": "getLatestImage",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "updateOne",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "TheyHaveFallen",
+        "private": true
+    }
+]
