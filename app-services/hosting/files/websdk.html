@@ -1,0 +1,26 @@
+<html>
+    <body>
+        <pre>
+function onLoad()
+{
+    app = new Realm.App({ id: "eldercam-gczhx" });
+}
+
+
+function updateImage()
+{
+    // Log in if we arent logged in
+
+    if (app.currentUser == null) {
+        const credentials = Realm.Credentials.emailPassword(username, password);
+        const user = await app.logIn(credentials);
+        if(user == null) return;
+    }
+
+    //Call a server side function
+    lastRecordRead = await app.currentUser.functions.getLatestImage(selectedImage);
+
+}
+</pre>
+</body>
+</html>

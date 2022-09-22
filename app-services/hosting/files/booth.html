@@ -1,0 +1,84 @@
+<html>
+<head>
+    <script src="booth.js"></script>
+<style>
+
+body {
+    background-color: black;
+    font-family: "Euclid Circular A", Akzidenz, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.container {
+    display: flex;
+}
+.theApp {
+    background: lightblue;
+    width: 640px;
+    height: 100vh;
+}
+
+.appIframe {
+    float: left;
+    width: 100%;
+    height: 100%;
+
+}
+
+.diagram {
+    margin-left: 60px;
+    position: relative;
+   flex-grow: 1;
+  background: black;
+}
+
+
+.label {
+  
+    text-align: center;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+    position: absolute;
+    width: 50px
+    height: 80px;
+    border-radius: 10px;
+}
+
+.item:hover {
+    background-color: red;
+}
+.item {
+   
+    text-align: center;
+    border: 2px solid black;
+    background-color: #00684A;
+    color: white;
+    position: absolute;
+    width: 100px;
+    height: 80px;
+    border-radius: 5px;
+}
+.line {
+   
+    color: white;
+    position: absolute;
+    border-color: white;
+    border-width: 2px;
+    border-style: solid;
+}
+
+
+</style>
+
+</head>
+<body onLoad="onLoad()">
+    <div class='container'>
+    <div class="theApp">
+      <iframe  class="appIframe" src="index.html" ></iframe>
+    </div>
+    <div id="diagram" class="diagram">
+       
+    </div>  
+</div>
+</body>
+
+</html>

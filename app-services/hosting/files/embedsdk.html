@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <pre>
+          const sdk = new ChartsEmbedSDK({
+                baseUrl: "https://charts.mongodb.com/charts-john-page-rawwr", 
+                getUserToken: () => app.currentUser._accessToken,
+          });
+
+          const chart = sdk.createChart({
+              chartId: "6111df0e-6156-418b-85f2-c1e4525c7865", 
+          });
+
+          chart.render(document.getElementById("chart"));
+</pre>
+</body>
+</html>
