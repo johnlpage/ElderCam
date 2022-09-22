@@ -6,15 +6,6 @@
         "disable_arg_logs": true
     },
     {
-        "name": "resetFunc",
-        "private": false
-    },
-    {
-        "name": "getLatestImage",
-        "private": false,
-        "disable_arg_logs": true
-    },
-    {
         "name": "updateOne",
         "private": false,
         "disable_arg_logs": true
@@ -22,5 +13,14 @@
     {
         "name": "TheyHaveFallen",
         "private": true
+    },
+    {
+        "name": "getLatestImage",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "resetFunc",
+        "private": false
     }
 ]

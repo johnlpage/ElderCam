@@ -1,0 +1,28 @@
+{
+    "name": "SendForRekognition",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT"
+        ],
+        "database": "eldercam",
+        "collection": "frames",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "project": {},
+        "full_document": false,
+        "full_document_before_change": false,
+        "unordered": false,
+        "skip_catchup_events": false
+    },
+    "disabled": false,
+    "event_processors": {
+        "AWS_EVENTBRIDGE": {
+            "config": {
+                "account_id": "722245653955",
+                "extended_json_enabled": false,
+                "region": "us-west-2"
+            }
+        }
+    }
+}

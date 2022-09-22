@@ -29,7 +29,6 @@ exports = async function(_id){
     
     //Last multi person seen
     
-
     const lastVisitor = await collection.find({_id:{$lte:docId},"labels":{ $elemMatch : { Name: 'Person', "Instances.1":{$exists:true}}}},{_id:1,time:1}).sort({_id:-1}).limit(1).toArray();
     frame.lastVisitor = lastVisitor[0]
     

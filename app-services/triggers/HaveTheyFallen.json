@@ -11,12 +11,12 @@
         "match": {
             "updateDescription.updatedFields.labels": {
                 "$elemMatch": {
-                    "Name": "Person",
                     "Instances.BoundingBox.Top": {
                         "$gt": {
                             "$numberDouble": "0.6"
                         }
-                    }
+                    },
+                    "Name": "Person"
                 }
             }
         },

@@ -19,7 +19,7 @@ const nodeSizes = { item : { width: 98, height: 88}, label: { width:98,height: 4
     defaulteb: {   color: "#FF9900", label: "EventBridge", x: 400, y: 600 , class: 'item', link: 'DefaultEventBus.png' },
     callrekognition:  {  label: "SDK", x: 780, y: 610 , class: 'label', link: '' },
     writeeb:  {  label: "SDK", x: 520, y: 610 , class: 'label', link: '' },
-    httpsendpoints:  {  label: "HTTPS Endpoints", x: 200, y: 300 , class: 'item', link: 'https://realm.mongodb.com/groups/625eaf349bc6263074a36221/apps/6329925d0da0cf2a4698d43b/endpoints' },
+    httpsendpoints:  {  label: "HTTPS Endpoints", x: 50, y: 300 , class: 'item', link: 'https://realm.mongodb.com/groups/625eaf349bc6263074a36221/apps/6329925d0da0cf2a4698d43b/endpoints' },
     atlasfn:  {  label: "Atlas Functions", x: 200, y: 220 , class: 'item', link: 'https://realm.mongodb.com/groups/625eaf349bc6263074a36221/apps/6329925d0da0cf2a4698d43b/functions' },
     sendback:  {  label: "Rule", x: 280, y: 610 , class: 'label', link: 'SendBackRule.png' },
     browser: { color: 'grey', label: "Web\nBrowser", x: 200, y: 20, class: 'item', link: 'view-source:/index.html' },
@@ -28,7 +28,8 @@ const nodeSizes = { item : { width: 98, height: 88}, label: { width:98,height: 4
     websdk:  {  label: "Realm Web SDK", x: 200, y: 120 , class: 'label', link: 'websdk.html' },
     charts:  {  label: "Atlas\nCharts", x: 0, y: 220 , class: 'item', link: 'https://charts.mongodb.com/charts-john-page-rawwr/dashboards/6329ce16-5397-44df-85ba-16f7dfd4e211' },
     embedsdk:  {  label: "Charts SDK", x: 0, y: 120 , class: 'label', link: 'embedsdk.html' },
-   
+    alert: {  label: "Trigger", x: 150, y: 400 , class: 'label', link:'https://realm.mongodb.com/groups/625eaf349bc6263074a36221/apps/6329925d0da0cf2a4698d43b/triggers/6329e335bf6a13d2a7f8795c' },
+    sns: { color: "#FF9900", label: "SNS", x: 150, y: 500 , class: 'item', link: 'SNS.png' },
    
   }
 
@@ -41,7 +42,8 @@ const nodeSizes = { item : { width: 98, height: 88}, label: { width:98,height: 4
                   { from: "atlashost", to: "browser", sides: 9},
                   {from: "charts", to: "browser", sides: 9},
                   { from: "atlasfn", to: "browser", sides: 2},
-                  { from: "atlasauth", to: "websdk", sides:3}
+                  { from: "atlasauth", to: "websdk", sides:3},
+                  { from: "atlas", to: "sns", sides:9}
                 ]
 
   const diagram = document.getElementById("diagram")
